@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar Hasil Skripsi – PLTS Hybrid IoT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ─── RESET ──────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ─── TOKENS ─────────────────────────────────────── */
+        :root {
+            --bg: #F1F5F9;
+            --surface-1: rgba(255, 255, 255, 0.45);
+            --surface-2: rgba(255, 255, 255, 0.6);
+            --surface-3: rgba(255, 255, 255, 0.85);
+            --border: rgba(15, 23, 42, 0.08);
+            --border-hi: rgba(14, 165, 233, 0.35);
+            --sky: #0284C7;
+            --sky-dim: rgba(14, 165, 233, 0.08);
+            --sky-glow: 0 8px 24px rgba(14, 165, 233, 0.15);
+            --emerald: #059669;
+            --emerald-dim: rgba(5, 150, 105, 0.08);
+            --amber: #D97706;
+            --amber-dim: rgba(217, 119, 6, 0.08);
+            --rose: #E11D48;
+            --rose-dim: rgba(225, 29, 72, 0.08);
+            --text-1: #0F172A;
+            --text-2: #334155;
+            --text-3: #64748B;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --slide-w: 1280px;
+            --slide-h: 720px;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: var(--bg);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(225, 29, 72, 0.04) 0%, transparent 45%),
+                radial-gradient(circle at 90% 10%, rgba(14, 165, 233, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(5, 150, 105, 0.04) 0%, transparent 45%),
+                radial-gradient(circle at 80% 90%, rgba(217, 119, 6, 0.04) 0%, transparent 45%);
+            font-family: var(--font-sans);
+            color: var(--text-1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ─── STAGE ──────────────────────────────────────── */
+        .stage {
+            width: var(--slide-w);
+            height: var(--slide-h);
+            position: relative;
+            background: var(--surface-1);
+            backdrop-filter: blur(25px) saturate(120%);
+            -webkit-backdrop-filter: blur(25px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 32px 80px rgba(15, 23, 42, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+            transform-origin: center center;
+        }
+
+        /* ─── TOP BAR ────────────────────────────────────── */
+        .topbar {
+            height: 56px;
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* ── LOGO AREA ── */
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-slot {
+            height: 32px;
+            width: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-slot img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Placeholder when image is not yet set */
+        .logo-placeholder {
+            height: 32px;
+            padding: 0 10px;
+            border: 1.5px dashed rgba(14, 165, 233, 0.35);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9.5px;
+            font-weight: 700;
+            color: rgba(14, 165, 233, 0.6);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .logo-placeholder:hover {
+            border-color: var(--sky);
+            color: var(--sky);
+        }
+
+        .logo-placeholder i {
+            font-size: 13px;
+        }
+
+        .logo-divider-v {
+            width: 1px;
+            height: 28px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .topbar-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--sky);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 3px 10px;
+            border-radius: 40px;
+            margin-left: 6px;
+        }
+
+        .topbar-right {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-3);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ─── VIEWPORT ───────────────────────────────────── */
+        .viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── SLIDES ─────────────────────────────────────── */
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 32px 50px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(12px);
+            transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+
+        /* ─── BOTTOM BAR ─────────────────────────────────── */
+        .bottombar {
+            height: 52px;
+            padding: 0 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .progress-track {
+            width: 220px;
+            height: 3px;
+            background: rgba(15, 23, 42, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sky), var(--emerald));
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav:hover {
+            background: var(--sky);
+            color: #FFFFFF;
+            border-color: var(--sky);
+            box-shadow: var(--sky-glow);
+        }
+
+        .counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-3);
+            font-family: var(--font-mono);
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .slide-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-3);
+            letter-spacing: 1px;
+        }
+
+        /* ─── SHARED COMPONENTS ──────────────────────────── */
+        .slide-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--sky);
+            margin-bottom: 6px;
+        }
+
+        .slide-heading {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-1);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slide-heading i {
+            color: var(--sky);
+            font-size: 21px;
+        }
+
+        .col-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .col-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            transition: border-color 0.2s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            border-color: var(--border-hi);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 12px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover .card-img-wrapper {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: var(--border-hi);
+            box-shadow: 0 8px 16px rgba(14, 165, 233, 0.06), inset 0 0 0 1px rgba(14, 165, 233, 0.1);
+        }
+
+        .card-img-wrapper img {
+            max-height: 85%;
+            max-width: 85%;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .card.sky {
+            border-color: rgba(14, 165, 233, 0.25);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.45));
+        }
+
+        .card.em {
+            border-color: rgba(5, 150, 105, 0.25);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.45));
+        }
+
+        .card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-1);
+        }
+
+        .card p,
+        .card ul {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+        .card-icon {
+            font-size: 22px;
+            color: var(--sky);
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 700;
+            border-radius: 40px;
+            padding: 3px 9px;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.sky {
+            background: var(--sky-dim);
+            color: var(--sky);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        .tag.em {
+            background: var(--emerald-dim);
+            color: var(--emerald);
+            border: 1px solid rgba(5, 150, 105, 0.25);
+        }
+
+        .tag.rose {
+            background: var(--rose-dim);
+            color: var(--rose);
+            border: 1px solid rgba(225, 29, 72, 0.25);
+        }
+
+        .tag.am {
+            background: var(--amber-dim);
+            color: var(--amber);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+        }
+
+        .blist {
+            list-style: none;
+        }
+
+        .blist li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 9px;
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.6;
+        }
+
+        .blist li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--sky);
+        }
+
+        .blist li strong {
+            color: var(--text-1);
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--sky);
+            font-family: var(--font-mono);
+            line-height: 1;
+        }
+
+        .stat-val.em {
+            color: var(--emerald);
+        }
+
+        .stat-val.am {
+            color: var(--amber);
+        }
+
+        .stat-val.ro {
+            color: var(--rose);
+        }
+
+        .stat-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 5px;
+        }
+
+        .alert-box {
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 12.5px;
+            line-height: 1.6;
+        }
+
+        .alert-box.rose {
+            background: var(--rose-dim);
+            border: 1px solid rgba(225, 29, 72, 0.2);
+            color: #9F1239;
+        }
+
+        .alert-box.em {
+            background: var(--emerald-dim);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            color: #065F46;
+        }
+
+        .alert-box.sky {
+            background: var(--sky-dim);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            color: #075985;
+        }
+
+        .alert-box i {
+            flex-shrink: 0;
+            font-size: 17px;
+            margin-top: 1px;
+        }
+
+        .t-wrap {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: var(--surface-2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: var(--surface-3);
+            color: var(--sky);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 9px 13px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td {
+            padding: 8px 13px;
+            font-size: 12px;
+            color: var(--text-2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            color: var(--text-1);
+            background: rgba(0, 0, 0, 0.015);
+        }
+
+        .code-block {
+            background: #0F172A;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.7;
+            color: #94A3B8;
+            overflow-y: auto;
+        }
+
+        .code-block .kw {
+            color: #F472B6;
+        }
+
+        .code-block .str {
+            color: #86EFAC;
+        }
+
+        .code-block .num {
+            color: #FCD34D;
+        }
+
+        .code-block .cm {
+            color: #475569;
+        }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .fn-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .fn-icon.sky {
+            background: var(--sky-dim);
+            color: var(--sky);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        .fn-icon.em {
+            background: var(--emerald-dim);
+            color: var(--emerald);
+            border: 1px solid rgba(5, 150, 105, 0.25);
+        }
+
+        .fn-icon.am {
+            background: var(--amber-dim);
+            color: var(--amber);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+        }
+
+        .fn-icon.ro {
+            background: var(--rose-dim);
+            color: var(--rose);
+            border: 1px solid rgba(225, 29, 72, 0.3);
+        }
+
+        .fn-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-2);
+            text-align: center;
+            letter-spacing: 0.5px;
+            max-width: 76px;
+            line-height: 1.3;
+        }
+
+        .fn-sub {
+            font-size: 9px;
+            color: var(--text-3);
+            text-align: center;
+            max-width: 76px;
+            line-height: 1.3;
+        }
+
+        .flow-arrow {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-3);
+            font-size: 14px;
+            min-width: 24px;
+        }
+
+        /* ─── IMAGE PLACEHOLDER COMPONENT ───────────────── */
+        /*
+  HOW TO USE:
+  Replace the entire .img-placeholder div with:
+    <img src="your-image.png" class="img-fill" alt="...">
+
+  Or change the src of the <img> inside .img-placeholder.
+*/
+        .img-zone {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--surface-2);
+            border: 1.5px dashed rgba(14, 165, 233, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 120px;
+        }
+
+        .img-zone img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            display: none;
+            /* shown by JS once src is set */
+        }
+
+        .img-zone img.loaded {
+            display: block;
+        }
+
+        .img-zone .iz-hint {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .img-zone img.loaded~.iz-hint {
+            display: none;
+        }
+
+        .img-zone .iz-icon {
+            font-size: 32px;
+            color: rgba(14, 165, 233, 0.3);
+        }
+
+        .img-zone .iz-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(14, 165, 233, 0.65);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .img-zone .iz-sub {
+            font-size: 10px;
+            color: var(--text-3);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .img-zone .iz-upload-btn {
+            margin-top: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--sky);
+            border: 1px solid rgba(14, 165, 233, 0.4);
+            border-radius: 40px;
+            padding: 4px 14px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: transparent;
+            transition: background 0.2s, color 0.2s;
+            pointer-events: auto;
+        }
+
+        .img-zone .iz-upload-btn:hover {
+            background: var(--sky);
+            color: #FFFFFF;
+        }
+
+        .img-zone input[type=file] {
+            display: none;
+        }
+
+        /* ─── MOCK DASHBOARD ─────────────────────────────── */
+        .mock-dash {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .mock-nav {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 7px 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mock-logo-text {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--sky);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .mock-live {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--emerald);
+        }
+
+        .live-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--emerald);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .mock-body {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 9px;
+            flex: 1;
+        }
+
+        .mock-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            border-radius: 8px;
+            padding: 9px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+        }
+
+        .mc-lbl {
+            font-size: 8.5px;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mc-val {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--sky);
+            font-family: var(--font-mono);
+        }
+
+        .mc-val.em {
+            color: var(--emerald);
+        }
+
+        .mini-chart {
+            height: 26px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* ─── COVER / CLOSING SPECIALS ───────────────────── */
+        #s1 {
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #s19 {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cover-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .cover-glow.a {
+            width: 500px;
+            height: 500px;
+            background: rgba(14, 165, 233, 0.12);
+            top: -100px;
+            left: -100px;
+        }
+
+        .cover-glow.b {
+            width: 400px;
+            height: 400px;
+            background: rgba(16, 185, 129, 0.1);
+            bottom: -80px;
+            right: -80px;
+        }
+
+        .cover-inner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1150px;
+            padding: 0 40px;
+        }
+
+        .cover-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--sky);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 5px 14px;
+            border-radius: 40px;
+            margin-bottom: 22px;
+        }
+
+        .cover-title {
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1.25;
+            color: var(--text-1);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-title span {
+            color: var(--sky);
+        }
+
+        .cover-sub {
+            font-size: 12px;
+            color: var(--text-3);
+            margin-bottom: 28px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .cover-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 11px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .cover-person {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 15px 13px;
+            text-align: center;
+        }
+
+        .cp-role {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--sky);
+            margin-bottom: 5px;
+        }
+
+        .cp-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 2px;
+        }
+
+        .cp-id {
+            font-size: 10.5px;
+            color: var(--text-3);
+            font-family: var(--font-mono);
+        }
+
+        .cover-footer {
+            margin-top: 20px;
+            font-size: 10px;
+            color: var(--text-3);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Cover logo row */
+        .cover-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .cover-logo-slot {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-logo-slot img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            display: none;
+        }
+
+        .cover-logo-slot img.loaded {
+            display: block;
+        }
+
+        .cover-logo-ph {
+            height: 68px;
+            padding: 0 14px;
+            border: 1.5px dashed rgba(14, 165, 233, 0.35);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(14, 165, 233, 0.65);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .cover-logo-ph:hover {
+            border-color: var(--sky);
+            color: var(--sky);
+        }
+
+        .cover-logo-ph i {
+            font-size: 16px;
+        }
+
+        .cover-logo-divider {
+            width: 1px;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .cover-logo-slot input[type=file],
+        .topbar-logo-input {
+            display: none;
+        }
+
+        .closing-big {
+            font-size: 76px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--text-1) 30%, var(--sky) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .closing-sub {
+            font-size: 14px;
+            color: var(--text-3);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 26px;
+        }
+
+        .closing-card {
+            display: inline-block;
+            background: var(--surface-2);
+            border: 1px solid var(--border-hi);
+            border-radius: var(--radius-md);
+            padding: 16px 32px;
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.8;
+        }
+
+        .closing-card strong {
+            color: var(--sky);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="stage" id="stage">
+
+        <!-- ══════════════════════════════════════════════════
+     TOP BAR  —  logo kiri + badge + tag kanan
+══════════════════════════════════════════════════ -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <!-- LOGO TELKOM -->
+                <div class="logo-group">
+                    <label class="logo-placeholder" id="tb-telkom-ph" style="display:none;"
+                        title="Klik untuk upload logo Telkom University">
+                        <i class="fa-solid fa-image"></i> Telkom University
+                        <input type="file" accept="image/*" class="topbar-logo-input"
+                            onchange="loadTopbarLogo('tb-telkom',this)">
+                    </label>
+                    <img id="tb-telkom" class="logo-slot" src="logo telkom.png" alt="Telkom University"
+                        style="display:block;height:42px;width:auto;object-fit:contain;">
+                    <div class="logo-divider-v"></div>
+                    <!-- LOGO MEGADATA -->
+                    <label class="logo-placeholder" id="tb-megadata-ph" style="display:none;"
+                        title="Klik untuk upload logo Megadata ISP">
+                        <i class="fa-solid fa-image"></i> Megadata ISP
+                        <input type="file" accept="image/*" class="topbar-logo-input"
+                            onchange="loadTopbarLogo('tb-megadata',this)">
+                    </label>
+                    <img id="tb-megadata" class="logo-slot" src="logo megadata.png" alt="Megadata ISP"
+                        style="display:block;height:38px;width:auto;object-fit:contain;">
+                </div>
+                <span class="topbar-badge">Seminar Hasil Skripsi</span>
+            </div>
+            <div class="topbar-right" id="topbar-tag">Cover</div>
+        </header>
+
+        <!-- VIEWPORT -->
+        <main class="viewport">
+
+            <!-- ══════════════════════════════════════════════
+     S1 – COVER
+══════════════════════════════════════════════ -->
+            <section class="slide active" id="s1" data-tag="Cover">
+                <div class="cover-glow a"></div>
+                <div class="cover-glow b"></div>
+                <div class="cover-inner">
+
+                    <!-- LOGO ROW di cover -->
+                    <div class="cover-logos">
+                        <!-- Logo Telkom (cover) -->
+                        <div class="cover-logo-slot">
+                            <label class="cover-logo-ph" id="cv-telkom-ph" style="display:none;"
+                                title="Klik upload logo Telkom">
+                                <i class="fa-solid fa-university"></i> Telkom University
+                                <input type="file" accept="image/*" onchange="loadCoverLogo('cv-telkom',this)">
+                            </label>
+                            <img id="cv-telkom" src="logo telkom.png" class="loaded" alt="Telkom University">
+                        </div>
+                        <div class="cover-logo-divider"></div>
+                        <!-- Logo Megadata (cover) -->
+                        <div class="cover-logo-slot">
+                            <label class="cover-logo-ph" id="cv-megadata-ph" style="display:none;"
+                                title="Klik upload logo Megadata ISP">
+                                <i class="fa-solid fa-building"></i> Megadata ISP
+                                <input type="file" accept="image/*" onchange="loadCoverLogo('cv-megadata',this)">
+                            </label>
+                            <img id="cv-megadata" src="logo megadata.png" class="loaded" alt="Megadata ISP">
+                        </div>
+                    </div>
+
+                    <div class="cover-eyebrow"><i class="fa-solid fa-solar-panel"></i> <span id="cfg-eyebrow">PLTS
+                            Hybrid · IoT · Laravel</span></div>
+                    <h1 class="cover-title" style="font-size:26px;">
+                        Sistem <span id="cfg-title1">Real-Time Monitoring Tegangan</span> <span id="cfg-title2">dan
+                            Kontrol Suhu</span><br>
+                        <span id="cfg-title-suffix">dengan Metode Hysteresis pada PLTS Hybrid Berbasis IoT</span>
+                    </h1>
+                    <p class="cover-sub" id="cfg-subtitle">Studi Kasus · Megadata ISP KRD Banjarsari</p>
+
+                    <div class="cover-grid">
+                        <div class="cover-person" id="cfg-person-mahasiswa">
+                            <div class="cp-role"><i class="fa-solid fa-user-graduate"></i> &nbsp;Mahasiswa</div>
+                            <div class="cp-name">Harun Ar Rasyid</div>
+                            <div class="cp-id">NIM. 2211102080</div>
+                        </div>
+                        <div class="cover-person" id="cfg-person-pembimbing1">
+                            <div class="cp-role"><i class="fa-solid fa-graduation-cap"></i> &nbsp;Pembimbing I</div>
+                            <div class="cp-name">Anggi Zafia, S.T., M.Eng.</div>
+                            <div class="cp-id">NIP : -</div>
+                        </div>
+                        <div class="cover-person" id="cfg-person-pembimbing2">
+                            <div class="cp-role"><i class="fa-solid fa-graduation-cap"></i> &nbsp;Pembimbing II</div>
+                            <div class="cp-name">Dasril Aldo, S.Kom., M.Kom.</div>
+                            <div class="cp-id">NIP : -</div>
+                        </div>
+                        <div class="cover-person" id="cfg-person-penguji1">
+                            <div class="cp-role"><i class="fa-solid fa-graduation-cap"></i> &nbsp;Penguji I</div>
+                            <div class="cp-name">Nama Penguji I</div>
+                            <div class="cp-id">NIP : -</div>
+                        </div>
+                        <div class="cover-person" id="cfg-person-penguji2">
+                            <div class="cp-role"><i class="fa-solid fa-graduation-cap"></i> &nbsp;Penguji II</div>
+                            <div class="cp-name">Nama Penguji II</div>
+                            <div class="cp-id">NIP : -</div>
+                        </div>
+                    </div>
+                    <div class="cover-footer" id="cfg-footer">Program Studi S1 Teknik Informatika · Telkom University
+                        Purwokerto · 2025
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S2 – LATAR BELAKANG
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s2" data-tag="Latar Belakang">
+                <div class="slide-eyebrow">01 · Background</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-circle-info"></i> Latar Belakang Masalah</h2>
+                <div class="col-3" style="flex:1;align-items:stretch;">
+
+                    <!-- Column 1: Masalah Utama -->
+                    <div style="display:flex;flex-direction:column;gap:13px;justify-content:space-between;">
+                        <div class="alert-box rose" style="margin-bottom:2px;">
+                            <i class="fa-solid fa-triangle-exclamation" style="color:var(--rose)"></i>
+                            <div><strong>Kondisi Eksisting</strong><br>
+                                <span id="cfg-lb-eksisting">Sistem PLTS Hybrid di Megadata ISP KRD Banjarsari berada di
+                                    lokasi terpencil. Monitoring daya dan suhu ruang baterai masih dilakukan secara
+                                    <strong>manual</strong>.</span>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:15px 12px;">
+                            <h3><i class="fa-solid fa-clock" style="color:var(--amber);margin-right:6px"></i> <span
+                                    id="cfg-lb-m1-judul">Waktu Respon Lambat</span></h3>
+                            <p style="font-size:11.5px;line-height:1.5;" id="cfg-lb-m1-isi">Petugas membutuhkan <strong
+                                    style="color:var(--text-1)">10–15 menit</strong> perjalanan menuju lokasi PLTS.
+                                Selama perjalanan, kerusakan baterai dapat semakin parah.</p>
+                        </div>
+                        <div class="card" style="padding:15px 12px;">
+                            <h3><i class="fa-solid fa-fire" style="color:var(--rose);margin-right:6px"></i> <span
+                                    id="cfg-lb-m2-judul">Optimasi Suhu Otomatis</span></h3>
+                            <p style="font-size:11.5px;line-height:1.5;" id="cfg-lb-m2-isi">Penambahan kipas pendingin
+                                perangkat elektronik pada gardu PLTS dengan kontrol otomatis.</p>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Visual Peta Jarak -->
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <p
+                            style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">
+                            Visualisasi Lokasi & Jarak</p>
+                        <div class="img-zone" id="iz-map-plts" onclick="triggerUpload('iz-map-plts')" style="flex:1;">
+                            <img id="img-map-plts" src="jarak_plts.png" class="loaded"
+                                onerror="this.classList.remove('loaded')" alt="Maps Jarak Kantor ke PLTS">
+                            <div class="iz-hint">
+                                <i class="fa-solid fa-map-location-dot iz-icon"
+                                    style="font-size:28px;color:var(--sky)"></i>
+                                <div class="iz-label" style="font-weight:700;font-size:12.5px;">Peta Rute & Jarak</div>
+                                <div class="iz-sub" style="font-size:10px;padding:0 12px;text-align:center;">Klik untuk
+                                    upload screenshot maps kantor ke PLTS</div>
+                                <button class="iz-upload-btn"
+                                    onclick="event.stopPropagation();triggerUpload('iz-map-plts')"
+                                    style="margin-top:4px;">
+                                    <i class="fa-solid fa-upload"></i> Upload Peta
+                                </button>
+                            </div>
+                            <input type="file" accept="image/*"
+                                onchange="loadImgZone('img-map-plts','iz-map-plts',this)">
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Solusi & Kemitraan -->
+                    <div style="display:flex;flex-direction:column;gap:13px;justify-content:space-between;">
+                        <div class="card sky" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+                            <div class="card-icon" style="font-size:18px;margin-bottom:6px;"><i
+                                    class="fa-solid fa-lightbulb"></i></div>
+                            <h3>Solusi yang Diusulkan</h3>
+                            <ul class="blist" style="margin-top:4px;font-size:11px;line-height:1.45;"
+                                id="cfg-lb-solusi">
+                                <li><strong>Real-time monitoring</strong> kelistrikan & suhu berbasis web Laravel</li>
+                                <li><strong>Kontrol suhu otomatis</strong> dengan algoritma Hysteresis + Exhaust Fan
+                                </li>
+                                <li><strong>Alert System</strong> berbasis Buzzer & threshold dinamis dari dashboard
+                                </li>
+                                <li>Eliminasi kebutuhan patroli manual — notifikasi <strong>instan</strong></li>
+                            </ul>
+                        </div>
+                        <!-- <div class="alert-box em" style="margin-top:2px;">
+                            <i class="fa-solid fa-handshake" style="color:var(--emerald)"></i>
+                            <div style="font-size:11px;line-height:1.45;" id="cfg-lb-kemitraan">Kemitraan resmi dengan <strong>Megadata ISP KRD Banjarsari</strong> sebagai objek implementasi.</div>
+                        </div> -->
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S3 – RUMUSAN & TUJUAN
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s3" data-tag="Rumusan & Tujuan">
+                <div class="slide-eyebrow">02 · Problem Statement & Objectives</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-bullseye"></i> Rumusan Masalah & Tujuan</h2>
+                <div class="col-2" style="flex:1;align-items:stretch;">
+
+                    <!-- Left Column: Rumusan & Batasan -->
+                    <div style="display:flex;flex-direction:column;gap:14px;justify-content:space-between;">
+                        <div>
+                            <p
+                                style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                                Rumusan Masalah</p>
+                            <div class="card" style="padding:16px;">
+                                <ul class="blist" style="font-size:11.5px;line-height:1.55;" id="cfg-rt-rumusan">
+                                    <li><strong>Akses & Medan Sulit:</strong> Keterbatasan mitra dalam memantau gardu
+                                        PLTS secara real-time karena medan jalan.</li>
+                                    <li><strong>Pemantauan Manual:</strong> Pembacaan parameter masih manual tanpa alert
+                                        real-time, memicu keterlambatan penanganan.</li>
+                                    <li><strong>Overheat Perangkat:</strong> Belum ada kontrol kipas pendingin otomatis
+                                        untuk elektronika gardu PLTS.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <p
+                                style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;margin-top:4px;">
+                                Batasan Masalah</p>
+                            <div class="card" style="padding:16px;">
+                                <ul class="blist" style="font-size:11.5px;line-height:1.55;" id="cfg-rt-batasan">
+                                    <li>Fokus pada implementasi IoT monitoring kelistrikan/suhu & kontrol exhaust, bukan
+                                        keseluruhan PLTS.</li>
+                                    <li>Objek pantau terbatas pada 4 baterai, listrik PLN, dan suhu gardu PLTS.</li>
+                                    <li>Kontrol terbatas pada kipas pendingin perangkat elektronika gardu.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Tujuan Penelitian -->
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <p
+                            style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                            Tujuan Penelitian</p>
+                        <div class="card em"
+                            style="flex:1;padding:24px;display:flex;flex-direction:column;justify-content:center;">
+                            <ul class="blist" style="font-size:12.5px;line-height:1.75;" id="cfg-rt-tujuan">
+                                <li style="margin-bottom:14px;"><strong>Monitoring & Kontrol
+                                        Real-time:</strong><br>Membangun sistem IoT untuk memantau tegangan baterai &
+                                    PLN serta mengendalikan kipas pendingin secara otomatis.</li>
+                                <li style="margin-bottom:14px;"><strong>Integrasi 7 Sensor:</strong><br>Mengintegrasikan
+                                    sensor untuk monitoring & alert tegangan PLN, 4 baterai, suhu gardu, dan suhu
+                                    jaringan.</li>
+                                <li><strong>Otomatisasi Suhu Elektronika:</strong><br>Mengontrol kipas pendingin
+                                    perangkat elektronika gardu secara otomatis berdasarkan pembacaan sensor suhu.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S4 – FLOWCHART PENELITIAN [NEW SLIDE]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s4" data-tag="Flowchart Penelitian">
+                <div class="slide-eyebrow">02b · Research Methodology</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-diagram-project"></i> Diagram Alir (Flowchart)
+                    Penelitian</h2>
+                <div class="col-2" style="flex:1; align-items:stretch;">
+
+                    <!-- Left: Interactive Image Zone -->
+                    <div class="img-zone" id="iz-flowchart" onclick="triggerUpload('iz-flowchart')">
+                        <img id="img-flowchart" src="flowchart_penelitian.png" class="loaded"
+                            onerror="this.classList.remove('loaded')" alt="Flowchart Penelitian">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-diagram-project iz-icon" style="font-size:32px"></i>
+                            <div class="iz-label">Flowchart Penelitian</div>
+                            <div class="iz-sub">Klik untuk upload diagram alir penelitian</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-flowchart')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-flowchart','iz-flowchart',this)">
+                    </div>
+
+                    <!-- Right: Key Phases Details -->
+                    <div style="display:flex; flex-direction:column; justify-content:space-between; gap:8px;">
+                        <div class="card sky" style="padding:10px 14px; flex:1;" id="cfg-fc-0">
+                            <h3 style="font-size:12px; margin-bottom:4px;" class="cfg-fc-judul"><span
+                                    class="badge blue">1</span> Inisiasi & Analisis Awal</h3>
+                            <p style="font-size:10.5px; line-height:1.45; margin:0;" class="cfg-fc-isi">Studi literatur
+                                diikuti observasi dan wawancara langsung ke Megadata ISP KRD Banjarsari (Mitra) untuk
+                                mengumpulkan seluruh kebutuhan fungsional sistem.</p>
+                        </div>
+                        <div class="card" style="padding:10px 14px; flex:1;" id="cfg-fc-1">
+                            <h3 style="font-size:12px; margin-bottom:4px;" class="cfg-fc-judul"><span
+                                    class="badge">2</span> Metode & Perakitan Alat</h3>
+                            <p style="font-size:10.5px; line-height:1.45; margin:0;" class="cfg-fc-isi">Menentukan
+                                metode penelitian (hysteresis suhu) dilanjutkan tahap perakitan perangkat keras IoT Unit
+                                1 (monitoring) & Unit 2 (alert system).</p>
+                        </div>
+                        <div class="card sky" style="padding:10px 14px; flex:1;" id="cfg-fc-2">
+                            <h3 style="font-size:12px; margin-bottom:4px;" class="cfg-fc-judul"><span
+                                    class="badge blue">3</span> Uji Coba & Iterasi Loop</h3>
+                            <p style="font-size:10.5px; line-height:1.45; margin:0;" class="cfg-fc-isi">Prosedur
+                                pengujian fungsional alat. Jika terdapat kesalahan (*error/conflict*), sistem diprogram
+                                ulang dan diuji kembali hingga terverifikasi berhasil.</p>
+                        </div>
+                        <div class="card" style="padding:10px 14px; flex:1;" id="cfg-fc-3">
+                            <h3 style="font-size:12px; margin-bottom:4px;" class="cfg-fc-judul"><span
+                                    class="badge">4</span> Implementasi & Evaluasi</h3>
+                            <p style="font-size:10.5px; line-height:1.45; margin:0;" class="cfg-fc-isi">Penerapan
+                                langsung sistem di lapangan mitra, evaluasi keandalan durabilitas, serta penyusunan
+                                laporan Tugas Akhir secara sistematis.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S5 – ARSITEKTUR SISTEM  [IMAGE SLIDE]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s5" data-tag="Arsitektur Sistem">
+                <div class="slide-eyebrow">03 · System Architecture</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-network-wired"></i> Arsitektur Sistem (Diagram Blok)
+                </h2>
+
+                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div class="img-zone" id="iz-arch-main" onclick="triggerUpload('iz-arch-main')">
+                        <img id="img-arch-main" src="diagram_blok.png" class="loaded"
+                            alt="Diagram Blok Arsitektur Sistem">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-network-wired iz-icon" style="font-size:24px"></i>
+                            <div class="iz-label">Diagram Blok Arsitektur</div>
+                            <div class="iz-sub">Pilih diagram blok</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-arch-main')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-arch-main','iz-arch-main',this)">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S5 – TAHAPAN PERCOBAAN HARDWARE [NEW SLIDE]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s6" data-tag="Tahapan Percobaan">
+                <div class="slide-eyebrow">03b · Hardware Prototyping Stages</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-list-check"></i> Tahapan Percobaan Hardware</h2>
+
+                <div class="t-wrap"
+                    style="flex:1; max-height:440px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius-sm);">
+                    <table style="font-size:10.5px; border-collapse:collapse; width:100%;">
+                        <thead style="position: sticky; top: 0; z-index: 2;">
+                            <tr>
+                                <th style="padding:6px 8px; width:4%; text-align:center;">No</th>
+                                <th style="padding:6px 12px; width:30%;">Kegiatan Percobaan</th>
+                                <th style="padding:6px 12px; width:33%;">Deskripsi Pelaksanaan</th>
+                                <th style="padding:6px 12px; width:33%;">Hasil Percobaan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cfg-tahapan-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S6 – PERUBAHAN ARSITEKTUR (BEFORE & AFTER) [NEW SLIDE]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s7" data-tag="Perubahan saat percobaan pembangunan alat">
+                <div class="slide-eyebrow">03c · Architecture Iteration</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-arrows-rotate"></i> Perubahan saat percobaan pembangunan
+                    alat</h2>
+                <div class="col-2" style="flex:1;align-items:stretch;">
+
+                    <!-- Left: Diagram Arsitektur -->
+                    <div class="img-zone" id="iz-arch-after" onclick="triggerUpload('iz-arch-after')" style="flex:1.2;">
+                        <img id="img-arch-after" src="perubahan.png" class="loaded" alt="Diagram Arsitektur Sistem">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-network-wired iz-icon" style="font-size:32px;color:var(--sky)"></i>
+                            <div class="iz-label" style="font-size:14px;font-weight:700;">Diagram Arsitektur</div>
+                            <div class="iz-sub" style="font-size:10px;">Klik untuk ganti diagram arsitektur</div>
+                        </div>
+                        <input type="file" accept="image/*"
+                            onchange="loadImgZone('img-arch-after','iz-arch-after',this)">
+                    </div>
+
+                    <!-- Right: Detail Perubahan -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:12px; justify-content:space-between;">
+                        <!-- Top Card: Sebelum (Before) -->
+                        <div class="card"
+                            style="padding:14px 16px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+                            <div class="tag rose" style="margin-bottom:8px; font-size:10px; align-self:start;"
+                                id="cfg-pa-before-label">
+                                Arsitektur Awal (Before)</div>
+                            <h3 style="font-size:13px; margin-bottom:6px; color:var(--text-1);"><i
+                                    class="fa-solid fa-triangle-exclamation"
+                                    style="color:var(--rose);margin-right:6px;"></i> <span
+                                    id="cfg-pa-before-judul">Kendala &amp; Desain Awal</span></h3>
+                            <ul class="blist" style="font-size:11px; line-height:1.5;" id="cfg-pa-before-poin">
+                                <li><strong>Konflik Hardware Serial:</strong> Pembacaan sensor PZEM-004T pada pin TX/RX
+                                    bawaan Arduino Nano mengalami bentrok/konflik data serial.</li>
+                                <li><strong>Limitasi Buffer I2C:</strong> Buffer pengiriman I2C antara Arduino &amp;
+                                    ESP8266 terbatasi maksimal 32 karakter sehingga data sensor terpotong.</li>
+                                <li><strong>Durabilitas Rendah:</strong> Arduino Nano mengalami hang secara berkala
+                                    setelah beroperasi nonstop selama 6 hari.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Bottom Card: Sesudah (After) -->
+                        <div class="card sky"
+                            style="padding:14px 16px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+                            <div class="tag em" style="margin-bottom:8px; font-size:10px; align-self:start;"
+                                id="cfg-pa-after-label">
+                                Arsitektur Akhir (After)</div>
+                            <h3 style="font-size:13px; margin-bottom:6px; color:var(--sky);"><i
+                                    class="fa-solid fa-circle-check" style="color:var(--emerald);margin-right:6px;"></i>
+                                <span id="cfg-pa-after-judul">Solusi &amp; Desain Akhir</span>
+                            </h3>
+                            <ul class="blist" style="font-size:11px; line-height:1.5;" id="cfg-pa-after-poin">
+                                <li><strong>SoftwareSerial &amp; Pin Remap:</strong> Rekonfigurasi PZEM-004T menggunakan
+                                    SoftwareSerial ke Pin 2 &amp; 3 Arduino Nano berhasil membaca data AC secara
+                                    presisi.</li>
+                                <li><strong>Pemisahan Jalur Sensor (DS18B20):</strong> Pemindahan sensor suhu DS18B20
+                                    langsung ke ESP8266 (Pin D5) &amp; ekspansi I/O PCF8574 guna memangkas beban payload
+                                    I2C.</li>
+                                <li><strong>Sistem Auto-Reset Aktif:</strong> ESP8266 mendeteksi Arduino hang lalu
+                                    melakukan reset otomatis melalui pin RST Arduino via relay.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S7 – PERANCANGAN PERANGKAT KERAS [NEW]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s8" data-tag="Perancangan Hardware">
+                <div class="slide-eyebrow">04 · Hardware Design</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-microchip"></i> Perancangan Perangkat Keras</h2>
+
+                <!-- 2x2 Grid of 4 Images -->
+                <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;">
+
+                    <!-- 1. Skema Perangkat Sensor Kontroler -->
+                    <div class="img-zone" id="iz-hw-sensor" onclick="triggerUpload('iz-hw-sensor')">
+                        <img id="img-hw-sensor" src="skema perangkat sensor controler.png" class="loaded"
+                            alt="Skema Perangkat Sensor Kontroler">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-microchip iz-icon" style="font-size:24px"></i>
+                            <div class="iz-label">Skema Sensor Kontroler</div>
+                            <div class="iz-sub">Rangkaian utama controller</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-hw-sensor')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-hw-sensor','iz-hw-sensor',this)">
+                    </div>
+
+                    <!-- 2. Skema Perangkat Alert System -->
+                    <div class="img-zone" id="iz-hw-alert" onclick="triggerUpload('iz-hw-alert')">
+                        <img id="img-hw-alert" src="alert new skema.png" class="loaded"
+                            alt="Skema Perangkat Alert System">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-bell iz-icon" style="font-size:24px"></i>
+                            <div class="iz-label">Skema Alert System</div>
+                            <div class="iz-sub">Rangkaian sistem peringatan buzzer</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-hw-alert')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-hw-alert','iz-hw-alert',this)">
+                    </div>
+
+                    <!-- 3. Bentuk Fisik IoT 1 -->
+                    <div class="img-zone" id="iz-hw-fisik1" onclick="triggerUpload('iz-hw-fisik1')">
+                        <img id="img-hw-fisik1" src="instalasi alat.jpg" class="loaded" alt="Bentuk Fisik IoT 1">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-cubes iz-icon" style="font-size:24px"></i>
+                            <div class="iz-label">Bentuk Fisik IoT 1</div>
+                            <div class="iz-sub">Perangkat fisik IoT Unit 1</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-hw-fisik1')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-hw-fisik1','iz-hw-fisik1',this)">
+                    </div>
+
+                    <!-- 4. Bentuk Fisik IoT 2 -->
+                    <div class="img-zone" id="iz-hw-fisik2" onclick="triggerUpload('iz-hw-fisik2')">
+                        <img id="img-hw-fisik2" src="alertnew.png" class="loaded" alt="Bentuk Fisik IoT 2">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-cubes iz-icon" style="font-size:24px"></i>
+                            <div class="iz-label">Bentuk Fisik IoT 2</div>
+                            <div class="iz-sub">Perangkat fisik IoT Unit 2</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-hw-fisik2')">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-hw-fisik2','iz-hw-fisik2',this)">
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S8 – INSTALASI HARDWARE
+══════════════════════════════════════════════ -->
+
+
+            <!-- ══════════════════════════════════════════════
+     S9 – SENSOR & KOMPONEN UTAMA [NEW]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s9" data-tag="Sensor & Komponen">
+                <div class="slide-eyebrow">06 · Hardware Components</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-microchip"></i> Sensor & Komponen Utama</h2>
+                <div class="col-3" style="flex:1;align-items:stretch;" id="cfg-sensor-komponen-list">
+
+                    <!-- Dinonaktifkan dan diisi oleh content.js -->
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S8 – METODE HYSTERESIS [NEW]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s10" data-tag="Metode Hysteresis">
+                <div class="slide-eyebrow">07 · Control Algorithm</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-arrows-spin"></i> Metode Kontrol Hysteresis</h2>
+                <div class="col-2" style="flex:1;align-items:stretch;">
+
+                    <!-- Left: Control Formula -->
+                    <div style="display:flex;flex-direction:column;gap:14px;justify-content:space-between;">
+                        <div>
+                            <p
+                                style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                                Rumus Kendali Suhu</p>
+                            <div class="card"
+                                style="padding:20px; display:flex; flex-direction:column; justify-content:center; height:100%;">
+                                <p style="font-size:12.5px;line-height:1.6;margin-bottom:16px;color:var(--text-2);"
+                                    id="cfg-s11-rumus-text">
+                                    Sinyal kendali exhaust fan (<strong style="color:var(--sky)">v</strong>) ditentukan
+                                    berdasarkan pembacaan suhu (<strong style="color:var(--sky)">u</strong>):
+                                </p>
+
+                                <div
+                                    style="display:flex; align-items:center; justify-content:start; font-family:var(--font-sans); font-size:13px; padding:15px; background:rgba(255,255,255,0.3); border-radius:10px; border:1px solid rgba(15,23,42,0.04); margin-bottom:10px;">
+                                    <!-- Left side: v = -->
+                                    <div
+                                        style="font-size:18px; font-weight:700; color:var(--text-1); font-family:var(--font-mono); margin-right:8px;">
+                                        v =</div>
+
+                                    <!-- Curly bracket -->
+                                    <div
+                                        style="font-size:62px; font-weight:200; line-height:1; margin-right:8px; color:var(--sky); transform:translateY(-2px); font-family:'Inter', sans-serif;">
+                                        {</div>
+
+                                    <!-- Equations list -->
+                                    <div
+                                        style="display:flex; flex-direction:column; gap:10px; font-family:var(--font-mono);">
+                                        <div
+                                            style="display:grid; grid-template-columns:90px 10px auto; align-items:center;">
+                                            <span
+                                                style="color:var(--emerald); font-weight:700; font-size:12px; background:var(--emerald-dim); border:1px solid rgba(5,150,105,0.15); padding:2px 8px; border-radius:4px; text-align:center;">+1
+                                                (ON)</span>
+                                            <span></span>
+                                            <span style="color:var(--text-1);">jika <strong style="color:var(--rose)">u
+                                                    &gt; <span id="cfg-s11-setpoint-atas">34°C</span></strong></span>
+                                        </div>
+                                        <div
+                                            style="display:grid; grid-template-columns:90px 10px auto; align-items:center;">
+                                            <span
+                                                style="color:var(--rose); font-weight:700; font-size:12px; background:var(--rose-dim); border:1px solid rgba(225,29,72,0.15); padding:2px 8px; border-radius:4px; text-align:center;">-1
+                                                (OFF)</span>
+                                            <span></span>
+                                            <span style="color:var(--text-1);">jika <strong style="color:var(--sky)">u
+                                                    &lt; <span id="cfg-s11-setpoint-bawah">32°C</span></strong></span>
+                                        </div>
+                                        <div
+                                            style="display:grid; grid-template-columns:90px 10px auto; align-items:center;">
+                                            <span
+                                                style="color:var(--text-2); font-weight:700; font-size:12px; background:rgba(0,0,0,0.03); border:1px solid rgba(0,0,0,0.06); padding:2px 8px; border-radius:4px; text-align:center;">TETAP</span>
+                                            <span></span>
+                                            <span style="color:var(--text-1);">jika <strong
+                                                    style="color:var(--amber)">32°C ≤ u ≤ 34°C</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert-box sky" style="font-size:11.5px;" id="cfg-s11-alert-text">
+                            <i class="fa-solid fa-circle-info" style="color:var(--sky)"></i>
+                            Nilai setpoint atas (34°C) dan setpoint bawah (32°C) dapat diubah secara dinamis melalui
+                            dashboard Laravel.
+                        </div>
+                    </div>
+
+                    <!-- Right: Deadband Concept -->
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <p
+                            style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                            Konsep Deadband</p>
+                        <div class="card em"
+                            style="flex:1;padding:20px;display:flex;flex-direction:column;justify-content:center;">
+                            <ul class="blist" style="font-size:12.5px;line-height:1.75;" id="cfg-s11-deadband-poin">
+                                <li style="margin-bottom:12px;">
+                                    <strong>Zona Mati (Deadband):</strong><br>
+                                    Selisih suhu batas ON dan OFF (&alpha; - &beta; = 3°C). Berfungsi sebagai penyangga
+                                    perubahan status.
+                                </li>
+                                <li style="margin-bottom:12px;">
+                                    <strong>Eliminasi Chattering:</strong><br>
+                                    Mencegah exhaust fan menyala dan mati secara berulang-ulang dalam waktu singkat
+                                    akibat fluktuasi suhu kecil.
+                                </li>
+                                <li>
+                                    <strong>Usia Komponen Lebih Panjang:</strong><br>
+                                    Mengurangi frekuensi switching pada sakelar relay mekanis sehingga memperpanjang
+                                    masa pakai komponen sistem.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S9 – IMPLEMENTASI DASHBOARD
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s11" data-tag="Implementasi Dashboard">
+                <div class="slide-eyebrow">08 · Implementation</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-desktop"></i> Implementasi Dashboard</h2>
+                <div style="flex:1; display:flex; gap:14px; align-items:stretch; width:100%;" id="cfg-dashboard-cols">
+                    <!-- Diisi secara dinamis oleh content.js -->
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S10 – PENGUJIAN SENSOR
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s12" data-tag="Pengujian Sensor">
+                <div class="slide-eyebrow">09 · Sensor Validation</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-gauge-high"></i> Pengujian & Kalibrasi Sensor</h2>
+
+                <!-- Top Layout: Table only -->
+                <div style="margin-bottom:12px;">
+                    <!-- Table Wrap -->
+                    <div class="t-wrap"
+                        style="border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden;">
+                        <table style="font-size:10.5px; border-collapse:collapse; width:100%;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:4px 8px; font-size:9.5px;">Sensor</th>
+                                    <th style="padding:4px 8px; font-size:9.5px;">Parameter</th>
+                                    <th style="padding:4px 8px; font-size:9.5px;">Alat Pembanding</th>
+                                    <th style="padding:4px 8px; font-size:9.5px;">Error (%)</th>
+                                    <th style="padding:4px 8px; font-size:9.5px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cfg-kalibrasi-tbody">
+                                <!-- Voltage Divider (rowspan=4) -->
+                                <tr>
+                                    <td rowspan="4"
+                                        style="padding:4px 8px; font-weight:700; color:var(--text-1); border-bottom:1px solid var(--border); background:rgba(14,165,233,0.02);">
+                                        <strong style="color:var(--text-1)">Voltage Divider</strong>
+                                    </td>
+                                    <td style="padding:4px 8px;">Tegangan Baterai 1</td>
+                                    <td rowspan="4"
+                                        style="padding:4px 8px; border-bottom:1px solid var(--border); color:var(--text-3);">
+                                        Multimeter Digital</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--text-1);">
+                                        0.47%</td>
+                                    <td rowspan="4" style="padding:4px 8px; border-bottom:1px solid var(--border);">
+                                        <span class="tag em" style="font-size:9px; padding:2px 6px;"><i
+                                                class="fa-solid fa-circle-check"></i> Lolos Kalibrasi</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px;">Tegangan Baterai 2</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--text-1);">
+                                        0.48%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px;">Tegangan Baterai 3</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--text-1);">
+                                        0.42%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px; border-bottom:1px solid var(--border);">Tegangan Baterai
+                                        4</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--text-1); border-bottom:1px solid var(--border);">
+                                        0.44%</td>
+                                </tr>
+
+                                <!-- DS18B20 (rowspan=2) -->
+                                <tr>
+                                    <td rowspan="2"
+                                        style="padding:4px 8px; font-weight:700; color:var(--text-1); border-bottom:1px solid var(--border); background:rgba(225,29,72,0.02);">
+                                        <strong style="color:var(--text-1)">DS18B20</strong>
+                                    </td>
+                                    <td style="padding:4px 8px;">Suhu Router Mikrotik</td>
+                                    <td rowspan="2"
+                                        style="padding:4px 8px; border-bottom:1px solid var(--border); color:var(--text-3);">
+                                        Termometer HTC-1</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--emerald);">
+                                        0.328%</td>
+                                    <td rowspan="2" style="padding:4px 8px; border-bottom:1px solid var(--border);">
+                                        <span class="tag em" style="font-size:9px; padding:2px 6px;"><i
+                                                class="fa-solid fa-circle-check"></i> Sangat Akurat</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px; border-bottom:1px solid var(--border);">Suhu Adaptor
+                                        PLTS</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--emerald); border-bottom:1px solid var(--border);">
+                                        0.309%</td>
+                                </tr>
+
+                                <!-- PZEM-004T (rowspan=3) -->
+                                <tr>
+                                    <td rowspan="3"
+                                        style="padding:4px 8px; font-weight:700; color:var(--text-1); background:rgba(217,119,6,0.02);">
+                                        <strong style="color:var(--text-1)">PZEM-004T</strong>
+                                    </td>
+                                    <td style="padding:4px 8px;">Tegangan Listrik AC</td>
+                                    <td rowspan="3" style="padding:4px 8px; color:var(--text-3);">Din Rail Meter</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--emerald);">
+                                        0.2%</td>
+                                    <td rowspan="3" style="padding:4px 8px;"><span class="tag em"
+                                            style="font-size:9px; padding:2px 6px;"><i
+                                                class="fa-solid fa-circle-check"></i> Sangat Akurat</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px;">Arus Listrik AC</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--emerald);">
+                                        0.01%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px 8px;">Daya Aktif AC</td>
+                                    <td
+                                        style="padding:4px 8px; font-family:var(--font-mono); font-weight:600; color:var(--emerald);">
+                                        0.28%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Bottom Layout: 3 Bukti Foto Pengujian -->
+                <p
+                    style="font-size:9.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">
+                    Bukti Pengujian & Kalibrasi Sensor</p>
+                <div class="col-3" style="height:150px; min-height:150px;">
+                    <!-- 1. Foto Pengujian DC -->
+                    <div class="img-zone" id="iz-cal-dc" onclick="triggerUpload('iz-cal-dc')">
+                        <img id="img-cal-dc" src="bukti validasi sensor voltage divider resistor.jpg" class="loaded"
+                            alt="Bukti Kalibrasi DC">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-car-battery iz-icon"
+                                style="font-size:20px; color:rgba(14, 165, 233, 0.4)"></i>
+                            <div class="iz-label" style="font-size:8.5px; letter-spacing:0.5px;">Kalibrasi Tegangan DC
+                            </div>
+                            <button class="iz-upload-btn" style="font-size:8px; padding:2px 8px; margin-top:2px;"
+                                onclick="event.stopPropagation();triggerUpload('iz-cal-dc')">Upload</button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-cal-dc','iz-cal-dc',this)">
+                    </div>
+
+                    <!-- 2. Foto Pengujian AC -->
+                    <div class="img-zone" id="iz-cal-ac" onclick="triggerUpload('iz-cal-ac')">
+                        <img id="img-cal-ac" src="bukti validasi sensor suhu.jpg" class="loaded"
+                            alt="Bukti Kalibrasi AC">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-bolt iz-icon"
+                                style="font-size:20px; color:rgba(14, 165, 233, 0.4)"></i>
+                            <div class="iz-label" style="font-size:8.5px; letter-spacing:0.5px;">Kalibrasi Tegangan AC
+                            </div>
+                            <button class="iz-upload-btn" style="font-size:8px; padding:2px 8px; margin-top:2px;"
+                                onclick="event.stopPropagation();triggerUpload('iz-cal-ac')">Upload</button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-cal-ac','iz-cal-ac',this)">
+                    </div>
+
+                    <!-- 3. Foto Pengujian Suhu -->
+                    <div class="img-zone" id="iz-cal-suhu" onclick="triggerUpload('iz-cal-suhu')">
+                        <img id="img-cal-suhu" src="bukti validasi sensor pzem004t.jpg" class="loaded"
+                            alt="Bukti Kalibrasi Suhu">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-temperature-half iz-icon"
+                                style="font-size:20px; color:rgba(14, 165, 233, 0.4)"></i>
+                            <div class="iz-label" style="font-size:8.5px; letter-spacing:0.5px;">Kalibrasi Sensor Suhu
+                            </div>
+                            <button class="iz-upload-btn" style="font-size:8px; padding:2px 8px; margin-top:2px;"
+                                onclick="event.stopPropagation();triggerUpload('iz-cal-suhu')">Upload</button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="loadImgZone('img-cal-suhu','iz-cal-suhu',this)">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S11 – PENGUJIAN REAL-TIME  [IMAGE SLIDE - BARU]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s13" data-tag="Pengujian Real-Time">
+                <div class="slide-eyebrow">10 · Real-Time Monitoring Test</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-tower-broadcast"></i> Pengujian Sistem Real-Time Monitoring</h2>
+                <div style="flex:1; display:flex; flex-direction:column; gap:12px; width:100%;">
+
+                    <!-- Top: Large Full-Width Delay Curve Image -->
+                    <div class="img-zone" id="iz-rt-delay" style="flex:1.2; min-height:220px;" onclick="triggerUpload('iz-rt-delay')">
+                        <img id="img-rt-delay" src="grafik_delay.png" class="loaded" alt="Visualisasi Kurva Delay">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-chart-line iz-icon" style="font-size:32px"></i>
+                            <div class="iz-label">Kurva Delay Pengiriman</div>
+                            <div class="iz-sub">Grafik visualisasi latensi sensor (rata-rata 2.37s)</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-rt-delay')">
+                                <i class="fa-solid fa-upload"></i> Upload Grafik .PNG
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*"
+                            onchange="loadImgZone('img-rt-delay','iz-rt-delay',this)">
+                    </div>
+
+                    <!-- Bottom: Stats & Footnote Row -->
+                    <div style="height:90px; display:flex; gap:14px; align-items:stretch;">
+                        <!-- Left Stats -->
+                        <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                            <div class="stat-box" style="padding: 10px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                                <div class="stat-val" style="font-size:24px; line-height:1.2;" id="cfg-s14-delay-val">2.37<span
+                                        style="font-size:12px">s</span>
+                                </div>
+                                <div class="stat-lbl" style="font-size:9.5px; margin-top:2px;">Delay Rata-rata</div>
+                            </div>
+                            <div class="stat-box" style="border-color:rgba(16,185,129,0.3); padding: 10px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                                <div class="stat-val em" style="font-size:24px; line-height:1.2;" id="cfg-s14-media-val">WiFi</div>
+                                <div class="stat-lbl" style="font-size:9.5px; margin-top:2px;">Media Transmisi</div>
+                            </div>
+                        </div>
+                        <!-- Right Footnote / Explanation -->
+                        <div class="alert-box sky" style="flex:1.5; font-size:11px; padding:10px 14px; display:flex; align-items:center;" id="cfg-s14-alert-text">
+                            <i class="fa-solid fa-circle-info" style="color:var(--sky); font-size:15px; margin-top:0;"></i>
+                            <span>Pada saat pengujian ini, delay mikrokontroles ESP8266 dibuat sekecil mungkin. Nilai delay didapati dari pengurangan timestamp sensor data created degnan date time ntp ESP8266.</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S12 – PENGUJIAN HYSTERESIS  [IMAGE + STATS]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s14" data-tag="Hysteresis Control">
+                <div class="slide-eyebrow">11 · Hysteresis Control Test</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-arrows-spin"></i> Pengujian Kontrol Hysteresis Suhu</h2>
+                <div style="flex:1;display:flex;gap:16px;">
+
+                    <!-- Left — image grafik suhu hysteresis -->
+                    <div class="img-zone" id="iz-hyst-chart" style="flex:2;" onclick="triggerUpload('iz-hyst-chart')">
+                        <img id="img-hyst-chart" src="grafik_deadband.png" class="loaded" alt="Grafik Hysteresis">
+                        <div class="iz-hint">
+                            <i class="fa-solid fa-chart-line iz-icon"></i>
+                            <div class="iz-label">Grafik Suhu vs Waktu</div>
+                            <div class="iz-sub">Plot data suhu selama pengujian hysteresis<br>— tampilkan zona
+                                ON/OFF/deadband</div>
+                            <button class="iz-upload-btn"
+                                onclick="event.stopPropagation();triggerUpload('iz-hyst-chart')">
+                                <i class="fa-solid fa-upload"></i> Upload Grafik .PNG
+                            </button>
+                        </div>
+                        <input type="file" accept="image/*"
+                            onchange="loadImgZone('img-hyst-chart','iz-hyst-chart',this)">
+                    </div>
+
+                    <!-- Right — stats + analysis + notes -->
+                    <div style="flex:1.4;display:flex;flex-direction:column;gap:12px;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;" id="cfg-s15-stats">
+                            <div class="stat-box" style="border-color:rgba(244,63,94,0.3)">
+                                <div class="stat-val ro" style="font-size:24px;">26</div>
+                                <div class="stat-lbl">Pergantian (Deadband 0°C)</div>
+                            </div>
+                            <div class="stat-box" style="border-color:rgba(245,158,11,0.3)">
+                                <div class="stat-val am" style="font-size:24px;">6</div>
+                                <div class="stat-lbl">Pergantian (Deadband 1°C)</div>
+                            </div>
+                            <div class="stat-box" style="border-color:rgba(16,185,129,0.3)">
+                                <div class="stat-val em" style="font-size:24px;">0</div>
+                                <div class="stat-lbl">Pergantian (Deadband ≥2°C)</div>
+                            </div>
+                            <div class="stat-box" style="border-color:rgba(56,189,248,0.3)">
+                                <div class="stat-val" style="font-size:24px;">2°C</div>
+                                <div class="stat-lbl">Deadband Optimal</div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Card -->
+                        <div class="card" style="padding:14px;flex:1;">
+                            <p
+                                style="font-size:10px;color:var(--text-3);margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">
+                                Analisis Eliminasi Chattering</p>
+                            <ul class="blist" style="font-size:11.5px;line-height:1.5;" id="cfg-s15-analisis">
+                                <li><strong>Deadband 0°C (Tanpa Hysteresis):</strong> Mengalami chattering parah dengan
+                                    total <strong>26 kali</strong> sakelar relay secara berulang (Relay 1: 22 kali,
+                                    Relay 2: 4 kali).</li>
+                                <li><strong>Deadband 1°C:</strong> Chattering berkurang secara signifikan menjadi hanya
+                                    <strong>6 kali</strong> sakelar relay (Relay 1: 4 kali, Relay 2: 2 kali).
+                                </li>
+                                <li><strong>Deadband ≥2°C:</strong> Chattering relay exhaust fan berhasil dieliminasi
+                                    sepenuhnya menjadi <strong>0 kali</strong> perpindahan status (Relay 1 & 2: 0 kali).
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- <div class="alert-box em" style="font-size:11.5px;">
+                            <i class="fa-solid fa-circle-check" style="color:var(--emerald)"></i>
+                            Berdasarkan grafik, nilai <strong>Deadband Hysteresis minimal 2°C</strong> adalah opsi
+                            optimal untuk menghilangkan efek chattering relay fan.
+                        </div> -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S13 – BLACKBOX TESTING
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s15" data-tag="Blackbox Testing">
+                <div class="slide-eyebrow">12 · Blackbox Testing</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-vial"></i> Hasil Blackbox Testing</h2>
+                <div class="stat-row" style="margin-bottom:14px;">
+                    <div class="stat-box">
+                        <div class="stat-val" id="cfg-s16-summary-total">29</div>
+                        <div class="stat-lbl">Total Skenario</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val em" id="cfg-s16-summary-berhasil">29</div>
+                        <div class="stat-lbl">Berhasil</div>
+                    </div>
+                    <div class="stat-box" style="border-color:rgba(244,63,94,0.3)">
+                        <div class="stat-val ro" id="cfg-s16-summary-gagal">0</div>
+                        <div class="stat-lbl">Gagal</div>
+                    </div>
+                    <div class="stat-box" style="border-color:rgba(16,185,129,0.4)">
+                        <div class="stat-val em" id="cfg-s16-summary-rate">100<span style="font-size:16px">%</span>
+                        </div>
+                        <div class="stat-lbl">Keberhasilan</div>
+                    </div>
+                </div>
+                <div class="t-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Modul Pengujian</th>
+                                <th style="text-align: center;">Total Skenario</th>
+                                <th style="text-align: center;">Berhasil</th>
+                                <th style="text-align: center;">Gagal</th>
+                                <th style="text-align: center;">Tingkat Keberhasilan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cfg-s16-tbody">
+                            <tr>
+                                <td>Autentikasi (Login/Register)</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">5</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    5</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dasbor Utama</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">5</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    5</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Pengaturan Batas Sensor</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">5</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    5</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Riwayat Data (Logs)</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">5</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    5</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Aksi Data Eksternal (Ekspor)</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">5</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    5</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Manajemen Profil Pengguna</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">4</td>
+                                <td
+                                    style="text-align: center; font-family: var(--font-mono); color: var(--emerald); font-weight: 600;">
+                                    4</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em"><i class="fa-solid fa-check"></i>
+                                        100%</span></td>
+                            </tr>
+                            <tr style="background: rgba(14, 165, 233, 0.05); font-weight: 700;">
+                                <td>Total</td>
+                                <td style="text-align: center; font-family: var(--font-mono);">29</td>
+                                <td style="text-align: center; font-family: var(--font-mono); color: var(--emerald);">29
+                                </td>
+                                <td style="text-align: center; font-family: var(--font-mono);">0</td>
+                                <td style="text-align: center;"><span class="tag em" style="font-weight: 700;"><i
+                                            class="fa-solid fa-square-check"></i> 100% Pass</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S14 – ANALISIS HASIL
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s16" data-tag="Analisis Hasil">
+                <div class="slide-eyebrow">13 · Results &amp; Analysis</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-chart-column"></i> Analisis Hasil &amp; Pembahasan</h2>
+                <div style="flex:1; display:flex; flex-direction:column; gap:10px; overflow:hidden;">
+
+                    <!-- Intro -->
+                    <p style="font-size:10.5px; color:var(--text-2); line-height:1.5; flex-shrink:0;">
+                        Analisis dilakukan terhadap tiga rumusan masalah yang telah ditetapkan: <strong>(1)</strong>
+                        keterbatasan monitoring real-time akibat medan jalan yang sulit, <strong>(2)</strong> belum
+                        adanya sistem notifikasi peringatan nilai sensor secara otomatis, dan <strong>(3)</strong> belum
+                        tersedianya kontrol kipas pendingin otomatis pada gardu PLTS.
+                    </p>
+
+                    <!-- Three analysis cards -->
+                    <div style="flex:1; display:flex; gap:10px; align-items:stretch; overflow:hidden;">
+
+                        <!-- Card 1: Monitoring Real-Time -->
+                        <div class="card sky"
+                            style="flex:1; display:flex; flex-direction:column; gap:8px; padding:14px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:8px;background:var(--sky-dim);border:1px solid rgba(14,165,233,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fa-solid fa-wifi" style="font-size:13px;color:var(--sky);"></i>
+                                </div>
+                                <h3 style="font-size:12px; color:var(--sky); margin:0;">Monitoring Real-Time</h3>
+                            </div>
+                            <div style="display:flex; align-items:baseline; gap:6px; flex-shrink:0;">
+                                <span
+                                    style="font-size:32px; font-weight:900; color:var(--sky); font-family:var(--font-mono); line-height:1;">2.37</span>
+                                <span style="font-size:13px; color:var(--text-2); font-weight:600;">detik rata-rata
+                                    delay</span>
+                            </div>
+                            <ul class="blist" style="font-size:10.5px; line-height:1.5; flex:1;">
+                                <li>Jauh lebih cepat dibanding perjalanan fisik ke lokasi PLTS (<strong>4&ndash;10
+                                        menit</strong>) bahkan lebih lama saat hujan.</li>
+                                <li>Median delay <strong>2 detik</strong>, memenuhi kebutuhan monitoring real-time.</li>
+                                <li>Seluruh sensor (Voltage Divider, PZEM-004T, DS18B20) menghasilkan rata-rata error
+                                    <strong>&le;0,5%</strong> sesuai batas toleransi yang ditetapkan.
+                                </li>
+                                <li>Permasalahan pemantauan manual berbasis kunjungan fisik <strong>berhasil
+                                        diatasi</strong>.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Card 2: Sistem Notifikasi -->
+                        <div class="card em"
+                            style="flex:1; display:flex; flex-direction:column; gap:8px; padding:14px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:8px;background:var(--emerald-dim);border:1px solid rgba(5,150,105,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fa-solid fa-bell" style="font-size:13px;color:var(--emerald);"></i>
+                                </div>
+                                <h3 style="font-size:12px; color:var(--emerald); margin:0;">Sistem Notifikasi Otomatis
+                                </h3>
+                            </div>
+                            <div style="display:flex; align-items:baseline; gap:6px; flex-shrink:0;">
+                                <span
+                                    style="font-size:32px; font-weight:900; color:var(--emerald); font-family:var(--font-mono); line-height:1;">100%</span>
+                                <span style="font-size:13px; color:var(--text-2); font-weight:600;">tingkat
+                                    keberhasilan</span>
+                            </div>
+                            <ul class="blist" style="font-size:10.5px; line-height:1.5; flex:1;">
+                                <li>Dari <strong>18 skenario</strong> pengujian melibatkan 9 parameter sensor (tegangan
+                                    4 baterai, tegangan/arus/daya PLN, 2 titik suhu), seluruhnya berhasil membunyikan
+                                    buzzer secara otomatis.</li>
+                                <li>Peringatan dini instan tanpa pemeriksaan berkala teknisi &mdash; risiko
+                                    keterlambatan penanganan <strong>diminimalkan</strong>.</li>
+                                <li>Blackbox testing antarmuka website: <strong>29 skenario</strong> pada 6 modul
+                                    (autentikasi, dashboard, threshold, riwayat, aksi eksternal, profil) menunjukkan
+                                    efektivitas 100%.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Card 3: Kontrol Suhu Hysteresis -->
+                        <div class="card"
+                            style="flex:1; display:flex; flex-direction:column; gap:8px; padding:14px; border-color:rgba(217,119,6,0.3);">
+                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:8px;background:var(--amber-dim);border:1px solid rgba(217,119,6,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fa-solid fa-temperature-half"
+                                        style="font-size:13px;color:var(--amber);"></i>
+                                </div>
+                                <h3 style="font-size:12px; color:var(--amber); margin:0;">Kontrol Kipas Hysteresis</h3>
+                            </div>
+                            <div style="display:flex; gap:10px; flex-shrink:0; align-items:center;">
+                                <div style="text-align:center;">
+                                    <div
+                                        style="font-size:22px; font-weight:900; color:var(--amber); font-family:var(--font-mono); line-height:1;">
+                                        &minus;2.75&deg;C</div>
+                                    <div
+                                        style="font-size:9px; color:var(--text-3); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:2px;">
+                                        Titik Sensor 1</div>
+                                </div>
+                                <div style="width:1px; background:var(--border); align-self:stretch;"></div>
+                                <div style="text-align:center;">
+                                    <div
+                                        style="font-size:22px; font-weight:900; color:var(--amber); font-family:var(--font-mono); line-height:1;">
+                                        &minus;0.12&deg;C</div>
+                                    <div
+                                        style="font-size:9px; color:var(--text-3); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:2px;">
+                                        Titik Sensor 2</div>
+                                </div>
+                            </div>
+                            <ul class="blist" style="font-size:10.5px; line-height:1.5; flex:1;">
+                                <li>Uji 11 variasi deadband Hysteresis (0&ndash;10): semakin besar deadband, semakin
+                                    sedikit frekuensi switching relay.</li>
+                                <li>Hysteresis = 0: perubahan status relay <strong>26 kali</strong>; Hysteresis &ge; 2:
+                                    <strong>tidak ada perubahan</strong> sama sekali.
+                                </li>
+                                <li>Suhu maksimal sensor 1 turun dari 39,94&deg;C menjadi 37,19&deg;C &mdash; perangkat
+                                    elektronika terjaga pada rentang suhu aman.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer conclusion -->
+                    <div class="alert-box sky" style="font-size:10.5px; flex-shrink:0; padding:10px 14px;">
+                        <i class="fa-solid fa-circle-check" style="color:var(--emerald)"></i>
+                        <span>Ketiga rumusan masalah <strong>telah terjawab</strong>. Hipotesis penelitian &mdash;
+                            sistem mampu melakukan monitoring tegangan &amp; kontrol suhu PLTS Hybrid secara real-time
+                            &mdash; <strong>terbukti dan terpenuhi</strong>.</span>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S15 – IMPLEMENTASI MITRA & SDGs [NEW]
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s17" data-tag="Implementasi Mitra">
+                <div class="slide-eyebrow">14 · Field Implementation</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-house-laptop"></i> Implementasi & Dampak SDGs</h2>
+                <div class="col-2" style="flex:1;align-items:stretch;">
+
+                    <!-- Left: Benefits -->
+                    <div style="display:flex;flex-direction:column;gap:14px;justify-content:space-between;">
+                        <div>
+                            <p
+                                style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                                Dampak Operasional bagi Mitra</p>
+                            <div class="card" style="padding:16px;">
+                                <ul class="blist" style="font-size:12px;line-height:1.65;" id="cfg-s18-dampak-poin">
+                                    <li><strong>Monitoring Jarak Jauh:</strong> Memantau parameter kelistrikan dan suhu
+                                        dari kantor mitra secara real-time tanpa perjalanan fisik harian ke gardu bukit.
+                                    </li>
+                                    <li><strong>Notifikasi Peringatan Dini:</strong> Perangkat Alert System dengan
+                                        buzzer di kantor berbunyi instan ketika sensor mendeteksi anomali.</li>
+                                    <li><strong>Proteksi Overheat:</strong> Otomatisasi fan secara preventif memelihara
+                                        stabilitas suhu ruang baterai.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="alert-box em" style="font-size:11.5px;" id="cfg-s18-alert-box">
+                            <i class="fa-solid fa-handshake" style="color:var(--emerald)"></i>
+                            Sistem berhasil dideploy mandiri di server lokal Megadata ISP KRD Banjarsari untuk
+                            kelangsungan layanan internet.
+                        </div>
+                    </div>
+
+                    <!-- Right: SDGs Contributions -->
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <p
+                            style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">
+                            Kontribusi terhadap SDGs</p>
+                        <div class="card em"
+                            style="flex:1;padding:20px;display:flex;flex-direction:column;justify-content:center;gap:16px;">
+                            <!-- SDG 7 -->
+                            <div style="display:flex;gap:14px;align-items:center;">
+                                <div
+                                    style="width:56px;height:56px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,0.04);">
+                                    <img src="sdgs7.png" alt="SDG 7 Logo"
+                                        style="max-width:100%;max-height:100%;object-fit:contain;">
+                                </div>
+                                <div style="font-size:12.5px;line-height:1.6;">
+                                    <strong style="color:var(--text-1)">SDG 7 (Energi Bersih & Terjangkau):</strong><br>
+                                    <span style="color:var(--text-2)">Meningkatkan keandalan dan masa pakai baterai PLTS
+                                        sebagai energi bersih di gardu pemancar internet.</span>
+                                </div>
+                            </div>
+
+                            <!-- SDG 9 -->
+                            <div style="display:flex;gap:14px;align-items:center;">
+                                <div
+                                    style="width:56px;height:56px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,0.04);">
+                                    <img src="sdgs9.png" alt="SDG 9 Logo"
+                                        style="max-width:100%;max-height:100%;object-fit:contain;">
+                                </div>
+                                <div style="font-size:12.5px;line-height:1.6;">
+                                    <strong style="color:var(--text-1)">SDG 9 (Industri, Inovasi, &
+                                        Infrastruktur):</strong><br>
+                                    <span style="color:var(--text-2)">Menerapkan teknologi IoT mandiri pada
+                                        infrastruktur transmisi jaringan internet nirkabel.</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S16 – KESIMPULAN & SARAN
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s18" data-tag="Kesimpulan & Saran">
+                <div class="slide-eyebrow">15 · Conclusions & Future Work</div>
+                <h2 class="slide-heading"><i class="fa-solid fa-clipboard-list"></i> Kesimpulan & Saran Pengembangan
+                </h2>
+                <div class="col-2" style="flex:1;align-items:start;">
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <p
+                            style="font-size:11px;color:var(--sky);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">
+                            Kesimpulan</p>
+                        <div class="card sky" style="flex:1">
+                            <ul class="blist" style="font-size:11.5px;line-height:1.55;" id="cfg-kes-poin">
+                                <li><strong>Monitoring Real-Time:</strong> Sistem berbasis IoT sukses memantau tegangan
+                                    4 baterai, tegangan PLN, dan suhu gardu via dashboard Laravel dengan rata-rata delay
+                                    <strong>2.37 detik</strong>.
+                                </li>
+                                <li><strong>Integrasi & Alert:</strong> Mengintegrasikan 7 sensor (DC voltage divider,
+                                    AC PZEM-004T, 2 DS18B20) untuk otomatisasi data, dilengkapi Alert System buzzer
+                                    lokal kantor mitra guna mempercepat penanganan.</li>
+                                <li><strong>Kendali Hysteresis:</strong> Otomatisasi exhaust fan menggunakan metode
+                                    kontrol Hysteresis berhasil menjaga suhu perangkat elektronika gardu pada batas
+                                    aman.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <p
+                            style="font-size:11px;color:var(--emerald);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">
+                            Saran Pengembangan</p>
+                        <div class="card em" style="flex:1">
+                            <ul class="blist" style="font-size:11.5px;line-height:1.55;" id="cfg-kes-saran">
+                                <li><strong>Protokol MQTT:</strong> Migrasi dari HTTPClient ke MQTT yang mendukung model
+                                    publish-subscribe untuk efisiensi monitoring real-time dan beban server lebih
+                                    ringan.</li>
+                                <li><strong>Parameter Komprehensif:</strong> Menambahkan pemantauan arus
+                                    pengisian/pengosongan baterai, daya inverter, serta efisiensi performa panel surya.
+                                </li>
+                                <li><strong>Notifikasi Multi-channel:</strong> Integrasi dengan berbagai media eksternal
+                                    seperti notifikasi WhatsApp, email, dan Telegram untuk respons lebih fleksibel.</li>
+                                <li><strong>Kontrol Suhu PID/Fuzzy:</strong> Peningkatan algoritma kendali kipas
+                                    menggunakan metode fuzzy logic atau PID controller agar kontrol suhu lebih presisi.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════
+     S17 – TERIMA KASIH
+══════════════════════════════════════════════ -->
+            <section class="slide" id="s19" data-tag="Terima Kasih">
+                <div class="cover-glow a" style="opacity:0.6;"></div>
+                <div class="cover-glow b" style="opacity:0.6;"></div>
+                <div style="position:relative;z-index:1;text-align:center;">
+
+                    <!-- Logo row on closing slide -->
+                    <div class="cover-logos" style="margin-bottom:22px;">
+                        <div class="cover-logo-slot">
+                            <label class="cover-logo-ph" id="cl-telkom-ph" style="display:none;"
+                                title="Upload logo Telkom">
+                                <i class="fa-solid fa-university"></i> Telkom University
+                                <input type="file" accept="image/*" onchange="loadCoverLogo('cl-telkom',this)">
+                            </label>
+                            <img id="cl-telkom" src="logo telkom.png" class="loaded" alt="Telkom University">
+                        </div>
+                        <div class="cover-logo-divider"></div>
+                        <div class="cover-logo-slot">
+                            <label class="cover-logo-ph" id="cl-megadata-ph" style="display:none;"
+                                title="Upload logo Megadata">
+                                <i class="fa-solid fa-building"></i> Megadata ISP
+                                <input type="file" accept="image/*" onchange="loadCoverLogo('cl-megadata',this)">
+                            </label>
+                            <img id="cl-megadata" src="logo megadata.png" class="loaded" alt="Megadata ISP">
+                        </div>
+                    </div>
+
+                    <div class="closing-big">Terima Kasih</div>
+                    <p class="closing-sub">Sesi Tanya Jawab — Q&amp;A</p>
+                    <div class="closing-card">
+                        <strong id="cfg-closing-dept">S1 Teknik Informatika</strong> &nbsp;·&nbsp; <span
+                            id="cfg-closing-fak">Fakultas Informatika</span><br>
+                        <span id="cfg-closing-univ">Telkom University Purwokerto</span><br>
+                        <span style="color:var(--sky)" id="cfg-closing-mitra">Mitra: Megadata ISP KRD Banjarsari</span>
+                    </div>
+                </div>
+            </section>
+
+        </main><!-- /viewport -->
+
+        <!-- BOTTOM BAR -->
+        <footer class="bottombar">
+            <div class="progress-track">
+                <div class="progress-fill" id="prog"></div>
+            </div>
+            <div class="slide-label" id="slabel">Cover</div>
+            <div class="controls">
+                <button class="btn-nav" onclick="prev()"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="counter" id="ctr">01 / 19</div>
+                <button class="btn-nav" onclick="next()"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </footer>
+
+    </div><!-- /stage -->
+
+    <script>
+        /* ── SCALE STAGE ────────────────────────────────── */
+        (function () {
+            const stage = document.getElementById('stage');
+            const W = 1280, H = 720;
+            function fit() {
+                const s = Math.min(window.innerWidth / W, window.innerHeight / H) * 0.96;
+                stage.style.transform = `scale(${s})`;
+            }
+            fit();
+            window.addEventListener('resize', fit);
+        })();
+
+        /* ── SLIDE LOGIC ────────────────────────────────── */
+        const TOTAL = 19;
+        let cur = 1;
+
+        function showSlide(n) {
+            n = Math.max(1, Math.min(TOTAL, n));
+            const oldEl = document.querySelector('.slide.active');
+            const newEl = document.getElementById('s' + n);
+            if (!newEl || oldEl === newEl) return;
+            oldEl.classList.remove('active');
+            oldEl.classList.add('exit');
+            setTimeout(() => oldEl.classList.remove('exit'), 450);
+            newEl.classList.add('active');
+            cur = n;
+            document.getElementById('prog').style.width = (n / TOTAL * 100) + '%';
+            document.getElementById('ctr').textContent = String(n).padStart(2, '0') + ' / ' + TOTAL;
+            const tag = newEl.dataset.tag || '';
+            document.getElementById('slabel').textContent = tag;
+            document.getElementById('topbar-tag').textContent = tag;
+        }
+        function next() { showSlide(cur + 1); }
+        function prev() { showSlide(cur - 1); }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+            if (e.key === 'ArrowUp') { e.preventDefault(); showSlide(1); }
+            if (e.key === 'ArrowDown') { e.preventDefault(); showSlide(TOTAL); }
+        });
+        let tx = 0;
+        document.querySelector('.viewport').addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, { passive: true });
+        document.querySelector('.viewport').addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - tx;
+            if (dx < -50) next(); if (dx > 50) prev();
+        });
+        showSlide(1);
+        document.getElementById('prog').style.width = (1 / TOTAL * 100) + '%';
+
+        /* ── IMAGE ZONE HELPERS ─────────────────────────── */
+        /*
+          triggerUpload(zoneId)   — programmatic click on file input inside zone
+          loadImgZone(imgId, zoneId, input) — reads file and shows image, hides placeholder
+          loadTopbarLogo(imgId, input)      — topbar logos
+          loadCoverLogo(imgId, input)       — cover / closing logos
+        
+          TO USE STATIC IMAGES (e.g. if you embed this in a folder with .png files):
+          Find the <img> tag with the matching id and set src="yourfile.png" directly.
+          Then add class="loaded" to that img tag. Done.
+        */
+        function triggerUpload(zoneId) {
+            const zone = document.getElementById(zoneId);
+            if (zone) zone.querySelector('input[type=file]').click();
+        }
+
+        function loadImgZone(imgId, zoneId, input) {
+            if (!input.files || !input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById(imgId);
+                const zone = document.getElementById(zoneId);
+                img.src = e.target.result;
+                img.classList.add('loaded');
+                const hint = zone.querySelector('.iz-hint');
+                if (hint) hint.style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function loadTopbarLogo(imgId, input) {
+            if (!input.files || !input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById(imgId);
+                const ph = document.getElementById(imgId + '-ph');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                if (ph) ph.style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function loadCoverLogo(imgId, input) {
+            if (!input.files || !input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById(imgId);
+                const ph = document.getElementById(imgId + '-ph');
+                img.src = e.target.result;
+                img.classList.add('loaded');
+                if (ph) ph.style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        /* Sync cover & closing logos automatically from topbar uploads */
+        document.getElementById('tb-telkom').addEventListener('load', function () {
+            ['cv-telkom', 'cl-telkom'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.src = this.src; el.classList.add('loaded'); const ph = document.getElementById(id + '-ph'); if (ph) ph.style.display = 'none'; }
+            });
+        });
+        document.getElementById('tb-megadata').addEventListener('load', function () {
+            ['cv-megadata', 'cl-megadata'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.src = this.src; el.classList.add('loaded'); const ph = document.getElementById(id + '-ph'); if (ph) ph.style.display = 'none'; }
+            });
+        });
+    </script>
+    <script src="content.js"></script>
+</body>
+
+</html>
